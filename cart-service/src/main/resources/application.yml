@@ -24,3 +24,7 @@ management:
 
 jwt:
   secret: a-string-secret-at-least-256-bits-long
+
+product:
+  service:
+    url: http://localhost:8082

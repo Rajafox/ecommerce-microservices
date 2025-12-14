@@ -32,3 +32,15 @@ management:
         include: health,info
 jwt:
   secret: a-string-secret-at-least-256-bits-long
+
+cart:
+  service:
+    url: http://localhost:8083
+
+product:
+  service:
+    url: http://localhost:8082
+
+payment:
+  service:
+    url: http://localhost:8085
