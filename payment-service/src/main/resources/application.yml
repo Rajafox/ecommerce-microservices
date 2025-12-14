@@ -19,3 +19,9 @@ management:
     web:
       exposure:
         include: health,info
+
+datasource:
+  url: jdbc:mysql://localhost:3306/ecommerce
+  username: root
+  password: Tushar@061289
+  driver-class-name: com.mysql.cj.jdbc.Driver
