@@ -1,2 +1,21 @@
+spring:
+  application:
+    name: payment-service
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: payment-service-group
+      auto-offset-reset: earliest
+
 server:
   port: 8085
+
+stripe:
+  api-key: sk_test_replace_me
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
