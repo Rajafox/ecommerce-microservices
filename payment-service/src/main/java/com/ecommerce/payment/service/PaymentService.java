@@ -6,8 +6,10 @@ import com.ecommerce.payment.dto.PaymentResponse;
 import com.ecommerce.payment.dto.PaymentStatus;
 import com.ecommerce.payment.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -18,25 +20,71 @@ public class PaymentService {
         this.repository = repository;
     }
 
+    @Transactional
     public PaymentResponse processPayment(PaymentRequest request) {
 
-        // Simulate payment logic
-        boolean success = request.amount()
-                .compareTo(BigDecimal.ZERO) > 0;
+        // 1️⃣ Idempotency check
+        Optional<Payment> existing =
+                repository.findByIdempotencyKey(request.idempotencyKey());
 
-        Payment payment = new Payment();
-        payment.setOrderId(request.orderId());
-        payment.setAmount(request.amount());
-        payment.setStatus(
-                success ? PaymentStatus.SUCCESS : PaymentStatus.FAILED
-        );
+        if (existing.isPresent()) {
+            Payment payment = existing.get();
+            return new PaymentResponse(
+                    payment.getStatus() == PaymentStatus.SUCCESS,
+                    "Idempotent replay",
+                    payment.getStripePaymentIntentId()
+            );
+        }
 
-        repository.save(payment);
+        try {
+            // 2️⃣ Create Stripe PaymentIntent
+            PaymentIntentCreateParams params =
+                    PaymentIntentCreateParams.builder()
+                            .setAmount(
+                                    request.amount()
+                                            .multiply(BigDecimal.valueOf(100))
+                                            .longValue() // paise
+                            )
+                            .setCurrency(request.currency().toLowerCase())
+                            .putMetadata("orderId", request.orderId().toString())
+                            .build();
 
-        return new PaymentResponse(
-                success,
-                success ? "Payment successful" : "Payment failed"
-        );
+            PaymentIntent intent = PaymentIntent.create(
+                    params,
+                    RequestOptions.builder()
+                            .setIdempotencyKey(request.idempotencyKey())
+                            .build()
+            );
+
+            // 3️⃣ Persist payment
+            Payment payment = new Payment();
+            payment.setOrderId(request.orderId());
+            payment.setAmount(request.amount());
+            payment.setCurrency(request.currency());
+            payment.setIdempotencyKey(request.idempotencyKey());
+            payment.setStripePaymentIntentId(intent.getId());
+            payment.setStatus(PaymentStatus.SUCCESS);
+
+            repository.save(payment);
+
+            return new PaymentResponse(
+                    true,
+                    "Payment successful",
+                    intent.getId()
+            );
+
+        } catch (Exception ex) {
+
+            Payment payment = new Payment();
+            payment.setOrderId(request.orderId());
+            payment.setAmount(request.amount());
+            payment.setCurrency(request.currency());
+            payment.setIdempotencyKey(request.idempotencyKey());
+            payment.setStatus(PaymentStatus.FAILED);
+
+            repository.save(payment);
+
+            return new PaymentResponse(false, "Payment failed", null);
+        }
     }
 }
-

@@ -4,5 +4,8 @@ import java.math.BigDecimal;
 
 public record PaymentRequest(
         Long orderId,
-        BigDecimal amount
+        BigDecimal amount,
+        String currency,
+        String idempotencyKey
 ) {}
+

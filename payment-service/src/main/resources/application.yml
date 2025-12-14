@@ -12,7 +12,8 @@ server:
   port: 8085
 
 stripe:
-  api-key: sk_test_replace_me
+  secret:
+    key: sk_test_XXXXXXXXXXXXXXXXXXXX
 
 management:
   endpoints:

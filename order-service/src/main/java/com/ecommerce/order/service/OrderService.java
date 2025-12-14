@@ -74,9 +74,15 @@ public class OrderService {
 
         Order savedOrder = repository.save(order);
 
-        // 4️⃣ Call payment service
+        String idempotencyKey = "order-" + savedOrder.getId();
+
         PaymentRequest paymentRequest =
-                new PaymentRequest(savedOrder.getId(), total);
+                new PaymentRequest(
+                        savedOrder.getId(),
+                        total,
+                        "INR",
+                        idempotencyKey
+                );
 
         PaymentResponse paymentResponse =
                 restTemplate.postForObject(

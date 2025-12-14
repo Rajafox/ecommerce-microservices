@@ -11,7 +11,12 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "payments")
+@Table(
+        name = "payments",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "idempotencyKey")
+        }
+)
 public class Payment {
 
     @Id
@@ -22,6 +27,13 @@ public class Payment {
 
     private BigDecimal amount;
 
+    private String currency;
+
+    @Column(nullable = false, unique = true)
+    private String idempotencyKey;
+
+    private String stripePaymentIntentId;
+
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
@@ -29,4 +41,3 @@ public class Payment {
 
     // getters/setters
 }
-
