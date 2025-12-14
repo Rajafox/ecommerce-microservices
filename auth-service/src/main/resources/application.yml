@@ -16,10 +16,10 @@ spring:
       hibernate:
         format_sql: true
 
-  security:
-    oauth2:
-      authorizationserver:
-        issuer-url: http://localhost:8081
+jwt:
+  secret: a-string-secret-at-least-256-bits-long
+  expiration: 1800000   # 30 minutes
+
 
 server:
   port: 8081
