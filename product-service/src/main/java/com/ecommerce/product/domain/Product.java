@@ -27,5 +27,13 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
+    private String brand;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+// TODO:  add Category, brandName, images
+
     // getters & setters
 }

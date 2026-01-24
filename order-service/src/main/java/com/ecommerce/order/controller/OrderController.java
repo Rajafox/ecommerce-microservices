@@ -27,6 +27,8 @@ public class OrderController {
     public Order checkout(Authentication auth) {
         return service.checkout(auth.getName());
     }
+
+    //TODO: list all orders from user,
 }
 
 

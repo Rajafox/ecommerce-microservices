@@ -13,7 +13,7 @@ server:
 
 stripe:
   secret:
-    key: sk_test_XXXXXXXXXXXXXXXXXXXX
+    key: sk_test_51RmxgzCcdhZAFvUEOIe1RyhGHQwcNTMW6ZPvVvOvSZmaUD6YpKinvvJcC7JtEsxlGrN4C1K24KtWSvyGtG2WspJE00dQNjJJce
 
 management:
   endpoints:
