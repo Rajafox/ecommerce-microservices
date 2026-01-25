@@ -67,7 +67,6 @@ public class AuthController {
 
         return ResponseEntity.ok(userManagementService.createUser(request));
     }
-// TODO: Add API to update, delete users and reset password
     /**
      * Simple response DTO for /me endpoint
      */

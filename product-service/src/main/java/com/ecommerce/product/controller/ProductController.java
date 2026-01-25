@@ -28,7 +28,7 @@ public class ProductController {
 
     @Operation(summary = "Get all products")
     @GetMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<Product> getAll() {
         return service.findAll();
     }
@@ -41,7 +41,7 @@ public class ProductController {
 
     @Operation(summary = "Create product (ADMIN only)")
     @SecurityRequirement(name = OpenApiConfig.SECURITY_SCHEME)
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Product create(@RequestBody Product product) {
         return service.create(product);
