@@ -4,11 +4,15 @@ import com.ecommerce.cart.CartRepository;
 import com.ecommerce.cart.domain.Cart;
 import com.ecommerce.cart.domain.CartItem;
 import com.ecommerce.cart.dto.AddCartItemRequest;
+import com.ecommerce.cart.dto.CartItemResponse;
+import com.ecommerce.cart.dto.CartResponse;
 import com.ecommerce.cart.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +37,51 @@ public class CartService {
                     cart.setUserId(userId);
                     return repository.save(cart);
                 });
+    }
+
+    /**
+     * Fetch cart with total amount
+     */
+    public CartResponse getCartWithTotal(String userId) {
+
+        Cart cart = repository.findById(userId)
+                .orElseGet(() -> {
+                    Cart c = new Cart();
+                    c.setUserId(userId);
+                    return repository.save(c);
+                });
+
+
+        List<CartItemResponse> items =
+                cart.getItems().stream().map(item -> {
+
+                    ProductResponse product =
+                            restTemplate.getForObject(
+                                    productServiceUrl + "/products/" + item.getProductId(),
+                                    ProductResponse.class
+                            );
+
+                    return new CartItemResponse(
+                            item.getProductId(),
+                            item.getQuantity(),product.price()
+                            .multiply(BigDecimal.valueOf(item.getQuantity()))
+                    );
+                }).toList();
+        BigDecimal total = items.stream().map(CartItemResponse::getCost).reduce(BigDecimal.ZERO,BigDecimal::add);
+
+        return new CartResponse(cart.getUserId(), items, total);
+    }
+
+    /**
+     * Clear cart
+     */
+    public void clearCart(String userId) {
+
+        Cart cart = repository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        cart.getItems().clear();
+        repository.save(cart);
     }
 
     public Cart addItem(String userId, AddCartItemRequest request) {

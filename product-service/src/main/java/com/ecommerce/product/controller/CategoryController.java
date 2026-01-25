@@ -24,7 +24,7 @@ public class CategoryController {
 
     // CREATE
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public Category create(@RequestBody CreateCategoryRequest request) {
         return service.create(request.getName());
     }
@@ -38,7 +38,7 @@ public class CategoryController {
 
     //UPDATE
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public Category update(
             @PathVariable Long id,
             @RequestBody UpdateCategoryRequest request) {
@@ -48,7 +48,7 @@ public class CategoryController {
 
     //DELETE
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

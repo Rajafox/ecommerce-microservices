@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.List;
+
 @Service
 public class OrderService {
 
@@ -32,7 +34,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order checkout(String userId) {
+    public Order createOrder(String userId) {
 
         // 1️⃣ Fetch cart
         CartResponse cart =
@@ -99,6 +101,22 @@ public class OrderService {
         }
 
         return repository.save(savedOrder);
+    }
+
+    /**
+     * Fetch all orders of a user
+     */
+    public List<Order> getOrdersForUser(String userId) {
+        return repository.findByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    /**
+     * Fetch order details (only owner can access)
+     */
+    public Order getOrderDetails(Long orderId, String userId) {
+        return repository.findByIdAndUserId(orderId, userId)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found or access denied"));
     }
 }
 

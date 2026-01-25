@@ -7,9 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @Tag(name = "Orders")
 @RestController
 @RequestMapping("/orders")
@@ -22,13 +23,35 @@ public class OrderController {
         this.service = service;
     }
 
-    @Operation(summary = "Checkout current user's cart")
-    @PostMapping("/checkout")
-    public Order checkout(Authentication auth) {
-        return service.checkout(auth.getName());
+    /**
+     * Create new order (checkout)
+     */
+    @Operation(summary = "Create new order")
+    @PostMapping
+    public Order createOrder(Authentication authentication) {
+        return service.createOrder(authentication.getName());
     }
 
-    //TODO: list all orders from user,
+    /**
+     * Fetch all orders of logged-in user
+     */
+    @Operation(summary = "Get all orders of user")
+    @GetMapping
+    public List<Order> getUserOrders(Authentication authentication) {
+        return service.getOrdersForUser(authentication.getName());
+    }
+
+    /**
+     * Fetch order details by ID
+     */
+    @Operation(summary = "Get order details")
+    @GetMapping("/{orderId}")
+    public Order getOrder(
+            @PathVariable Long orderId,
+            Authentication authentication) {
+
+        return service.getOrderDetails(orderId, authentication.getName());
+    }
 }
 
 

@@ -3,6 +3,7 @@ package com.ecommerce.cart.controller;
 import com.ecommerce.cart.config.OpenApiConfig;
 import com.ecommerce.cart.domain.Cart;
 import com.ecommerce.cart.dto.AddCartItemRequest;
+import com.ecommerce.cart.dto.CartResponse;
 import com.ecommerce.cart.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,9 +23,20 @@ public class CartController {
     }
 
     @Operation(summary = "Get current user's cart")
+    /**
+     * Get cart with total amount
+     */
     @GetMapping
-    public Cart getCart(Authentication auth) {
-        return service.getCart(auth.getName());
+    public CartResponse getCart(Authentication authentication) {
+        return service.getCartWithTotal(authentication.getName());
+    }
+
+    /**
+     * Clear cart
+     */
+    @DeleteMapping
+    public void clearCart(Authentication authentication) {
+        service.clearCart(authentication.getName());
     }
 
     @Operation(summary = "Add item to cart")
