@@ -40,10 +40,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String token = header.substring(7);
                 Claims claims = validator.validateToken(token);
 
+                Object rolesObj = claims.get("roles");
+
                 List<SimpleGrantedAuthority> authorities =
-                        ((List<String>) claims.get("roles"))
+                        rolesObj == null
+                                ? List.of()
+                                : ((List<?>) rolesObj)
                                 .stream()
-                                .map(SimpleGrantedAuthority::new)
+                                .map(role -> new SimpleGrantedAuthority(role.toString()))
                                 .toList();
 
                 Authentication auth =

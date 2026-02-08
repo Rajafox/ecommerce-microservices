@@ -1,7 +1,6 @@
 package com.ecommerce.cart.controller;
 
 import com.ecommerce.cart.config.OpenApiConfig;
-import com.ecommerce.cart.domain.Cart;
 import com.ecommerce.cart.dto.AddCartItemRequest;
 import com.ecommerce.cart.dto.CartResponse;
 import com.ecommerce.cart.service.CartService;
@@ -41,11 +40,12 @@ public class CartController {
 
     @Operation(summary = "Add item to cart")
     @PostMapping("/items")
-    public Cart addItem(
+    public CartResponse addItem(
             Authentication auth,
             @RequestBody AddCartItemRequest request) {
 
-        return service.addItem(parseUserId(auth), request);
+        service.addItem(parseUserId(auth), request);
+        return service.getCartWithTotal(parseUserId(auth));
     }
 
     private Long parseUserId(Authentication authentication) {

@@ -4,6 +4,8 @@ import com.ecommerce.product.domain.Category;
 import com.ecommerce.product.dto.CreateCategoryRequest;
 import com.ecommerce.product.dto.UpdateCategoryRequest;
 import com.ecommerce.product.service.CategoryService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +42,8 @@ public class CategoryController {
     @PutMapping("/{id}")
     //@PreAuthorize("hasRole('ADMIN')")
     public Category update(
-            @PathVariable Long id,
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "Category ID", required = true)
+            @PathVariable("id")  Long id,
             @RequestBody UpdateCategoryRequest request) {
 
         return service.update(id, request.getName());
@@ -49,7 +52,8 @@ public class CategoryController {
     //DELETE
     @DeleteMapping("/{id}")
     //@PreAuthorize("hasRole('ADMIN')")
-    public void delete(@PathVariable Long id) {
+    public void delete(@Parameter(name = "id", in = ParameterIn.PATH, description = "Category ID", required = true)
+                           @PathVariable("id")  Long id) {
         service.delete(id);
     }
 }

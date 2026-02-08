@@ -1,8 +1,13 @@
 package com.ecommerce.cart.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+@Getter
+@Setter
 public class CartResponse {
 
     private Long userId;
@@ -17,5 +22,5 @@ public class CartResponse {
         this.totalAmount = totalAmount;
     }
 
-    // getters
+
 }

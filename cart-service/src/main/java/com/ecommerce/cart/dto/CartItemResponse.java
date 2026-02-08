@@ -16,6 +16,7 @@ public class CartItemResponse {
     public CartItemResponse(Long productId, Integer quantity, BigDecimal cost) {
         this.productId = productId;
         this.quantity = quantity;
+        this.cost = cost;
     }
 
     // getters
