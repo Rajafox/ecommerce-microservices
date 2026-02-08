@@ -1,0 +1,107 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+entity "users" as users {
+  *id : BIGINT
+  --
+  username : VARCHAR
+  password : VARCHAR
+}
+
+entity "roles" as roles {
+  *id : INT
+  --
+  name : VARCHAR
+}
+
+entity "user_roles" as user_roles {
+  *user_id : BIGINT
+  *role_id : INT
+}
+
+entity "carts" as carts {
+  *id : BIGINT
+  --
+  user_id : BIGINT
+}
+
+entity "cart_items" as cart_items {
+  *id : BIGINT
+  --
+  cart_id : BIGINT
+  product_id : BIGINT
+  quantity : INT
+}
+
+entity "orders" as orders {
+  *id : BIGINT
+  --
+  user_id : BIGINT
+  total_amount : DECIMAL
+  status : VARCHAR
+}
+
+entity "order_items" as order_items {
+  *id : BIGINT
+  --
+  order_id : BIGINT
+  product_id : BIGINT
+  quantity : INT
+}
+
+entity "categories" as categories {
+  *id : BIGINT
+  --
+  name : VARCHAR
+}
+
+entity "products" as products {
+  *id : BIGINT
+  --
+  category_id : BIGINT
+  name : VARCHAR
+  price : DECIMAL
+  stock : INT
+}
+
+entity "product_images" as product_images {
+  *id : BIGINT
+  --
+  product_id : BIGINT
+  image_url : VARCHAR
+}
+
+entity "currencies" as currencies {
+  *id : INT
+  --
+  code : VARCHAR
+}
+
+entity "payments" as payments {
+  *id : BIGINT
+  --
+  order_id : BIGINT
+  currency : VARCHAR
+  amount : DECIMAL
+  status : VARCHAR
+}
+
+roles ||--o{ user_roles : "has"
+users ||--o{ user_roles : "assigned"
+
+users ||--o{ carts : "owns"
+carts ||--o{ cart_items : "contains"
+products ||--o{ cart_items : "in"
+
+users ||--o{ orders : "places"
+orders ||--o{ order_items : "includes"
+products ||--o{ order_items : "in"
+
+categories ||--o{ products : "categorizes"
+products ||--o{ product_images : "has"
+
+orders ||--o{ payments : "paid by"
+currencies ||--o{ payments : "denominated in"
+
+@enduml

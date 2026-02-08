@@ -28,7 +28,7 @@ public class CartController {
      */
     @GetMapping
     public CartResponse getCart(Authentication authentication) {
-        return service.getCartWithTotal(authentication.getName());
+        return service.getCartWithTotal(parseUserId(authentication));
     }
 
     /**
@@ -36,7 +36,7 @@ public class CartController {
      */
     @DeleteMapping
     public void clearCart(Authentication authentication) {
-        service.clearCart(authentication.getName());
+        service.clearCart(parseUserId(authentication));
     }
 
     @Operation(summary = "Add item to cart")
@@ -45,7 +45,11 @@ public class CartController {
             Authentication auth,
             @RequestBody AddCartItemRequest request) {
 
-        return service.addItem(auth.getName(), request);
+        return service.addItem(parseUserId(auth), request);
+    }
+
+    private Long parseUserId(Authentication authentication) {
+        return Long.parseLong(authentication.getName());
     }
 }
 

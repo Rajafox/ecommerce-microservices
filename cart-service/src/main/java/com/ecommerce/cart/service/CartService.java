@@ -1,12 +1,13 @@
 package com.ecommerce.cart.service;
 
-import com.ecommerce.cart.CartRepository;
+
 import com.ecommerce.cart.domain.Cart;
 import com.ecommerce.cart.domain.CartItem;
 import com.ecommerce.cart.dto.AddCartItemRequest;
 import com.ecommerce.cart.dto.CartItemResponse;
 import com.ecommerce.cart.dto.CartResponse;
 import com.ecommerce.cart.dto.ProductResponse;
+import com.ecommerce.cart.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -30,8 +31,8 @@ public class CartService {
         this.restTemplate = restTemplate;
     }
 
-    public Cart getCart(String userId) {
-        return repository.findById(userId)
+    public Cart getCart(Long userId) {
+        return repository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart cart = new Cart();
                     cart.setUserId(userId);
@@ -42,9 +43,9 @@ public class CartService {
     /**
      * Fetch cart with total amount
      */
-    public CartResponse getCartWithTotal(String userId) {
+    public CartResponse getCartWithTotal(Long userId) {
 
-        Cart cart = repository.findById(userId)
+        Cart cart = repository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart c = new Cart();
                     c.setUserId(userId);
@@ -75,16 +76,16 @@ public class CartService {
     /**
      * Clear cart
      */
-    public void clearCart(String userId) {
+    public void clearCart(Long userId) {
 
-        Cart cart = repository.findById(userId)
+        Cart cart = repository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         cart.getItems().clear();
         repository.save(cart);
     }
 
-    public Cart addItem(String userId, AddCartItemRequest request) {
+    public Cart addItem(Long userId, AddCartItemRequest request) {
 
         // 🔍 Validate product exists
         ProductResponse product =

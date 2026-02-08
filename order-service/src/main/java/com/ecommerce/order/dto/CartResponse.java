@@ -3,7 +3,7 @@ package com.ecommerce.order.dto;
 import java.util.List;
 
 public record CartResponse(
-        String userId,
+        Long userId,
         List<CartItemResponse> items
 ) {}
 

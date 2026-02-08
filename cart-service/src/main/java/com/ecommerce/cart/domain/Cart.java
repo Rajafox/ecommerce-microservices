@@ -14,7 +14,11 @@ import java.util.List;
 public class Cart {
 
     @Id
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @OneToMany(
             mappedBy = "cart",

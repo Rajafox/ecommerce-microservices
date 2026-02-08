@@ -1,5 +1,6 @@
 package com.ecommerce.auth.security;
 
+import com.ecommerce.auth.domain.Role;
 import com.ecommerce.auth.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
@@ -17,10 +20,17 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long expiration;
 
+
+
     public String generateToken(User user) {
 
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expiration);
+
+        List<String> roles = user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .toList();
 
         return Jwts.builder()
                 .setSubject(user.getId().toString())

@@ -63,7 +63,7 @@ public class PaymentService {
             Payment payment = new Payment();
             payment.setOrderId(request.orderId());
             payment.setAmount(request.amount());
-            payment.setCurrency(request.currency());
+            payment.setCurrency(request.currency().toLowerCase());
             payment.setIdempotencyKey(request.idempotencyKey());
             payment.setStripePaymentIntentId(intent.getId());
             payment.setStatus(PaymentStatus.SUCCESS);
@@ -81,7 +81,7 @@ public class PaymentService {
             Payment payment = new Payment();
             payment.setOrderId(request.orderId());
             payment.setAmount(request.amount());
-            payment.setCurrency(request.currency());
+            payment.setCurrency(request.currency().toLowerCase());
             payment.setIdempotencyKey(request.idempotencyKey());
             payment.setStatus(PaymentStatus.FAILED);
 

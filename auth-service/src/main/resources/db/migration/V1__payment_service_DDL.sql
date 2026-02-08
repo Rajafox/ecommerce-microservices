@@ -15,7 +15,7 @@ CREATE TABLE payments (
     currency VARCHAR(10) NOT NULL,
     stripe_payment_id VARCHAR(100) NOT NULL,
     idempotency_key VARCHAR(100) NOT NULL,
-    status VARCHAR(50),
+    status VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_payment_order
         FOREIGN KEY (order_id)
@@ -25,3 +25,6 @@ CREATE TABLE payments (
     FOREIGN KEY (currency) REFERENCES currencies(code)
 );
 
+CREATE UNIQUE INDEX idx_payments_stripe_payment_id ON payments(stripe_payment_id);
+CREATE UNIQUE INDEX idx_payments_idempotency_key ON payments(idempotency_key);
+CREATE INDEX idx_payments_order_id ON payments(order_id);

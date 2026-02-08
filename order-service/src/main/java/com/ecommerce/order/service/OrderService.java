@@ -34,7 +34,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(String userId) {
+    public Order createOrder(Long userId) {
 
         // 1️⃣ Fetch cart
         CartResponse cart =
@@ -106,14 +106,14 @@ public class OrderService {
     /**
      * Fetch all orders of a user
      */
-    public List<Order> getOrdersForUser(String userId) {
+    public List<Order> getOrdersForUser(Long userId) {
         return repository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
     /**
      * Fetch order details (only owner can access)
      */
-    public Order getOrderDetails(Long orderId, String userId) {
+    public Order getOrderDetails(Long orderId, Long userId) {
         return repository.findByIdAndUserId(orderId, userId)
                 .orElseThrow(() ->
                         new RuntimeException("Order not found or access denied"));

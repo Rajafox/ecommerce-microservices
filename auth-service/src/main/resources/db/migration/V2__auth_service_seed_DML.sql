@@ -12,27 +12,13 @@ INSERT INTO roles (name, description) VALUES
 INSERT INTO users (username, password)
 VALUES (
     'admin',
-    '$2a$10$7uF6z6R0kM3yYFh3p7YkMe0M0gX6Zx8GQ4z5J2f6cH6ZkZpZyJvD6'
-);
+    '$2a$10$8S54QnkckZm/U3HujxNYUuxOqCgVI.7R8BA0TjqADLLwhAQUHX/46'
+),
+('user1','$2a$10$uayYTfTTtNJaPQDHX/u1pO8DwQ7AU/SlMVN8i3jDu5fDWsYOfJr5e')
+; -- admin/admin ; user1/user
 
-SET @admin_id = LAST_INSERT_ID();
-
-INSERT INTO user_roles (user_id, role)
-VALUES
-    (@admin_id, 'ROLE_ADMIN'),
-    (@admin_id, 'ROLE_USER');
-
--- =========================
--- NORMAL USER
--- =========================
-INSERT INTO users (username, password)
-VALUES (
-    'user',
-    '$2a$10$7uF6z6R0kM3yYFh3p7YkMe0M0gX6Zx8GQ4z5J2f6cH6ZkZpZyJvD6'
-);
-
-SET @user_id = LAST_INSERT_ID();
 
 INSERT INTO user_roles (user_id, role)
 VALUES
-    (@user_id, 'ROLE_USER');
+    (1, 1),
+    (2, 2);

@@ -11,7 +11,7 @@ CREATE TABLE cart_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     product_id BIGINT NOT NULL,
     quantity INT NOT NULL,
-    cart_id VARCHAR(100),
+    cart_id BIGINT NOT NULL,
     CONSTRAINT fk_cart
         FOREIGN KEY (cart_id)
         REFERENCES carts(id)
@@ -21,3 +21,7 @@ CREATE TABLE cart_items (
         REFERENCES products(id)
         ON DELETE CASCADE
 );
+
+CREATE INDEX idx_carts_user_id ON carts(user_id);
+CREATE INDEX idx_cart_items_cart_id ON cart_items(cart_id);
+CREATE INDEX idx_cart_items_product_id ON cart_items(product_id);

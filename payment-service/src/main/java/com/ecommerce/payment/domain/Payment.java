@@ -14,7 +14,8 @@ import java.time.Instant;
 @Table(
         name = "payments",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "idempotencyKey")
+                @UniqueConstraint(columnNames = "idempotency_key"),
+                @UniqueConstraint(columnNames = "stripe_payment_id")
         }
 )
 public class Payment {
@@ -23,18 +24,23 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "order_id", nullable = false)
     private Long orderId;
 
+    @Column(nullable = false)
     private BigDecimal amount;
 
+    @Column(nullable = false)
     private String currency;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "idempotency_key", nullable = false, unique = true)
     private String idempotencyKey;
 
+    @Column(name = "stripe_payment_id", nullable = false, unique = true)
     private String stripePaymentIntentId;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private PaymentStatus status;
 
     private Instant createdAt = Instant.now();

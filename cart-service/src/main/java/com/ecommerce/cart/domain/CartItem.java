@@ -14,12 +14,14 @@ public class CartItem {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "product_id", nullable = false)
     private Long productId;
 
+    @Column(nullable = false)
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 }
 
