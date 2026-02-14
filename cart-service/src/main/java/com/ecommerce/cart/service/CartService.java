@@ -38,10 +38,11 @@ public class CartService {
     }
 
     public Cart getCart(Long userId) {
-        return repository.findByUserId(userId)
+        return repository.findByUserIdAndIsActive(userId, true)
                 .orElseGet(() -> {
                     Cart cart = new Cart();
                     cart.setUserId(userId);
+                    cart.setIsActive(true);
                     return repository.save(cart);
                 });
     }
@@ -51,10 +52,11 @@ public class CartService {
      */
     public CartResponse getCartWithTotal(Long userId) {
 
-        Cart cart = repository.findByUserId(userId)
+        Cart cart = repository.findByUserIdAndIsActive(userId, true)
                 .orElseGet(() -> {
                     Cart c = new Cart();
                     c.setUserId(userId);
+                    c.setIsActive(true);
                     return repository.save(c);
                 });
 
@@ -121,6 +123,54 @@ public class CartService {
         }
 
         return repository.save(cart);
+    }
+
+    /**
+     * Remove item from cart
+     */
+    public void removeItem(Long userId, Long productId) {
+        Cart cart = repository.findByUserIdAndIsActive(userId, true)
+                .orElseThrow(() -> new RuntimeException("Active cart not found"));
+
+        cart.getItems().removeIf(item -> item.getProductId().equals(productId));
+        repository.save(cart);
+    }
+
+    /**
+     * Update item quantity in cart
+     */
+    public Cart updateItemQuantity(Long userId, Long productId, Integer quantity) {
+        Cart cart = repository.findByUserIdAndIsActive(userId, true)
+                .orElseThrow(() -> new RuntimeException("Active cart not found"));
+
+        CartItem item = cart.getItems().stream()
+                .filter(i -> i.getProductId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Product not found in cart"));
+
+        if (quantity <= 0) {
+            cart.getItems().remove(item);
+        } else {
+            // Validate stock
+            ProductResponse product = fetchProduct(productId);
+            if (product == null || product.stock() < quantity) {
+                throw new RuntimeException("Insufficient stock");
+            }
+            item.setQuantity(quantity);
+        }
+
+        return repository.save(cart);
+    }
+
+    /**
+     * Mark cart as inactive (used after order placement)
+     */
+    public void markCartAsInactive(Long userId) {
+        Cart cart = repository.findByUserIdAndIsActive(userId, true)
+                .orElseThrow(() -> new RuntimeException("Active cart not found"));
+
+        cart.setIsActive(false);
+        repository.save(cart);
     }
 
     /**

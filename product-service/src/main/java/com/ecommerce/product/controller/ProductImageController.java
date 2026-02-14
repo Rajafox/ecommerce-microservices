@@ -1,10 +1,13 @@
 package com.ecommerce.product.controller;
 
+import com.ecommerce.product.api.ApiMessages;
+import com.ecommerce.product.api.ApiResponse;
 import com.ecommerce.product.domain.ProductImage;
 import com.ecommerce.product.dto.AddImageRequest;
 import com.ecommerce.product.service.ProductImageService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +39,9 @@ public class ProductImageController {
     }
 
     @DeleteMapping("/{imageId}")
-    public void deleteImage( @Parameter(name = "imageId", in = ParameterIn.PATH, description = "Image ID", required = true)
+    public ResponseEntity<ApiResponse<Void>> deleteImage( @Parameter(name = "imageId", in = ParameterIn.PATH, description = "Image ID", required = true)
                                  @PathVariable("imageId")  Long imageId ) {
         service.deleteImage(imageId);
+        return ResponseEntity.ok(ApiResponse.success(ApiMessages.IMAGE_DELETED, null));
     }
 }

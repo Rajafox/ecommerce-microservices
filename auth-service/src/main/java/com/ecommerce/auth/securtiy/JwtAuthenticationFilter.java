@@ -1,5 +1,6 @@
 package com.ecommerce.auth.security;
 
+import com.ecommerce.auth.dto.AddressResponse;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -24,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/auth/login")|| path.startsWith("/auth/users")
+        return path.startsWith("/auth/login")|| path.startsWith("/auth/users") || path.startsWith("/auth/reset-password")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/actuator");

@@ -81,7 +81,7 @@ public class OrderService {
                 new PaymentRequest(
                         savedOrder.getId(),
                         total,
-                        "INR",
+                        "USD",
                         idempotencyKey
                 );
 
@@ -90,6 +90,14 @@ public class OrderService {
         // 5️⃣ Update order status
         if (paymentResponse != null && paymentResponse.success()) {
             savedOrder.setStatus(OrderStatus.PAID);
+
+            // 6️⃣ Mark cart as inactive after successful payment
+            try {
+                deactivateCart(userId);
+            } catch (Exception e) {
+                // Log error but don't fail the order
+                System.err.println("Failed to deactivate cart: " + e.getMessage());
+            }
         } else {
             savedOrder.setStatus(OrderStatus.PAYMENT_FAILED);
         }
@@ -181,6 +189,21 @@ public class OrderService {
                         PaymentResponse.class
                 );
         return response.getBody();
+    }
+
+    /**
+     * Helper method to deactivate cart after order placement
+     */
+    private void deactivateCart(Long userId) {
+        HttpHeaders headers = createHeadersWithToken();
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        restTemplate.exchange(
+                cartServiceUrl + "/cart/deactivate",
+                HttpMethod.POST,
+                entity,
+                Void.class
+        );
     }
 }
 

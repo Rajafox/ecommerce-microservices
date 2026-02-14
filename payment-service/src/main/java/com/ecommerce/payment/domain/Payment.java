@@ -36,12 +36,14 @@ public class Payment {
     @Column(name = "idempotency_key", nullable = false, unique = true)
     private String idempotencyKey;
 
-    @Column(name = "stripe_payment_id", nullable = false, unique = true)
+    @Column(name = "stripe_payment_id", nullable = true)
     private String stripePaymentIntentId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentStatus status;
+
+    transient private String paymentUrl;
 
     private Instant createdAt = Instant.now();
 

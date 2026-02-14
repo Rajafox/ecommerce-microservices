@@ -20,14 +20,15 @@ public class Cart {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
     @OneToMany(
             mappedBy = "cart",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private List<CartItem> items = new ArrayList<>();
-
-    // getters & setters
 }
 
 
