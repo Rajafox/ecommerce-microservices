@@ -24,7 +24,7 @@ server:
 
 stripe:
   secret:
-    key: sk_test_51RmxgzCcdhZAFvUEOIe1RyhGHQwcNTMW6ZPvVvOvSZmaUD6YpKinvvJcC7JtEsxlGrN4C1K24KtWSvyGtG2WspJE00dQNjJJce
+    key: <secret>
 
 jwt:
   secret: a-string-secret-at-least-256-bits-long
