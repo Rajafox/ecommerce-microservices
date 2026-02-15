@@ -21,7 +21,7 @@ CREATE TABLE payments (
         FOREIGN KEY (order_id)
         REFERENCES orders(id)
         ON DELETE CASCADE,
-    fk_payment_currency
+    CONSTRAINT fk_payment_currency
     FOREIGN KEY (currency) REFERENCES currencies(code)
 );
 

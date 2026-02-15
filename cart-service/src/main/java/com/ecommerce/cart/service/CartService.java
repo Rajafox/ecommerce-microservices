@@ -86,8 +86,8 @@ public class CartService {
      */
     public void clearCart(Long userId) {
 
-        Cart cart = repository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+        Cart cart = repository.findByUserIdAndIsActive(userId, true)
+                .orElseThrow(() -> new RuntimeException("Active cart not found"));
 
         cart.getItems().clear();
         repository.save(cart);

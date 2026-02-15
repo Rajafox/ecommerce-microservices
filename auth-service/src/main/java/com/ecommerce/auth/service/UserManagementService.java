@@ -41,12 +41,20 @@ public class UserManagementService {
             throw new RuntimeException("Email already exists");
         }
 
+        if (request.getAddress() == null) {
+            throw new RuntimeException("Address is required");
+        }
+        if (request.getAddress().getPhoneNumber() == null) {
+            throw new RuntimeException("Phone number is required");
+        }
+
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
+
         user.setPhoneNumber(request.getAddress().getPhoneNumber());
 
         List<Role> roles = roleRepository.findByNameIn(request.getRoles());
