@@ -43,8 +43,6 @@ public class Payment {
     @Column(nullable = false)
     private PaymentStatus status;
 
-    transient private String paymentUrl;
-
     private Instant createdAt = Instant.now();
 
     // getters/setters

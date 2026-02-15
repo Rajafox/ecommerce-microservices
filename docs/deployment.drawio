@@ -1,0 +1,142 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.3.8">
+  <diagram id="aws-deploy" name="AWS Deployment">
+    <mxGraphModel dx="2906" dy="1771" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="customer" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Customer" vertex="1">
+          <mxGeometry height="60" width="120" x="-40" y="-5" as="geometry" />
+        </mxCell>
+        <mxCell id="stripe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Stripe API" vertex="1">
+          <mxGeometry height="60" width="140" x="1610" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="aws" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="AWS Region" vertex="1">
+          <mxGeometry height="760" width="1360" x="230" y="-110" as="geometry" />
+        </mxCell>
+        <mxCell id="vpc" parent="aws" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;" value="VPC" vertex="1">
+          <mxGeometry height="690" width="1300" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="public" parent="vpc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#0277bd;" value="Public Subnets (Multi-AZ)" vertex="1">
+          <mxGeometry height="130" width="1240" x="20" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="igw" parent="public" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Internet Gateway" vertex="1">
+          <mxGeometry height="50" width="180" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="alb" parent="public" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Application Load Balancer" vertex="1">
+          <mxGeometry height="50" width="230" x="260" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="nat" parent="public" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="NAT Gateway" vertex="1">
+          <mxGeometry height="50" width="180" x="540" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="app" parent="vpc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;" value="Private App Subnets (Multi-AZ)" vertex="1">
+          <mxGeometry height="250" width="1240" x="20" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="asg" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Auto Scaling Group" vertex="1">
+          <mxGeometry height="50" width="190" x="400" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="auth" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="auth-service (EC2)" vertex="1">
+          <mxGeometry height="50" width="170" x="150" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="order" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="order-service (EC2)" vertex="1">
+          <mxGeometry height="50" width="170" x="500" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="product" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="product-service (EC2)" vertex="1">
+          <mxGeometry height="50" width="180" x="920" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="payment" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="payment-service (EC2)" vertex="1">
+          <mxGeometry height="50" width="180" x="860" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="eb" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Elastic Beanstalk (Managed Option)" vertex="1">
+          <mxGeometry height="50" width="280" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="cart" parent="app" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="cart-service (EC2)" vertex="1">
+          <mxGeometry height="50" width="170" x="280" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="data" parent="vpc" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;" value="Private Data Subnets (Multi-AZ)" vertex="1">
+          <mxGeometry height="130" width="1240" x="20" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="rds" parent="data" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d79b00;" value="Amazon RDS MySQL" vertex="1">
+          <mxGeometry height="60" width="220" x="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cache" parent="data" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#fff2cc;strokeColor=#d79b00;" value="Amazon ElastiCache Redis" vertex="1">
+          <mxGeometry height="60" width="250" x="530" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cw" parent="aws" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="CloudWatch" vertex="1">
+          <mxGeometry height="50" width="170" x="1110" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="customer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" target="igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="igw" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="alb" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="asg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="eb" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;" target="asg">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="asg" style="endArrow=block;html=1;" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="asg" style="endArrow=block;html=1;" target="cart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="asg" style="endArrow=block;html=1;" target="order">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="asg" style="endArrow=block;html=1;" target="product">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="asg" style="endArrow=block;html=1;" target="payment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="auth" style="endArrow=block;html=1;" target="rds">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="cart" style="endArrow=block;html=1;" target="rds">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="order" style="endArrow=block;html=1;" target="rds">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="product" style="endArrow=block;html=1;" target="rds">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="payment" style="endArrow=block;html=1;" target="rds">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="cart" style="endArrow=block;html=1;" target="cache">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="product" style="endArrow=block;html=1;" target="cache">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="order" style="endArrow=block;html=1;" target="nat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="payment" style="endArrow=block;html=1;" target="nat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="nat" style="endArrow=block;html=1;" target="stripe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="auth" style="dashed=1;endArrow=block;html=1;" target="cw" value="metrics/logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="cart" style="dashed=1;endArrow=block;html=1;" target="cw" value="metrics/logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="order" style="dashed=1;endArrow=block;html=1;" target="cw" value="metrics/logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="product" style="dashed=1;endArrow=block;html=1;" target="cw" value="metrics/logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="payment" style="dashed=1;endArrow=block;html=1;" target="cw" value="metrics/logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
