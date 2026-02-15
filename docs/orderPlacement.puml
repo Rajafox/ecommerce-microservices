@@ -1,0 +1,41 @@
+@startuml
+hide footbox
+autonumber
+
+title Order Placement Sequence Flow (JWT-secured)
+
+actor User as U
+participant "auth-service" as A
+participant "cart-service" as C
+participant "order-service" as O
+participant "product-service" as PR
+participant "payment-service" as P
+
+U -> A: POST /auth/login\n{username, password}
+A --> U: 200 OK\n{accessToken}
+
+U -> C: POST /cart/items\nAuthorization: Bearer <token>\n{productId, quantity}
+C --> U: 200 OK\nCartResponse
+
+U -> O: POST /orders\nAuthorization: Bearer <token>
+
+O -> C: GET /cart\nAuthorization: Bearer <token>
+C --> O: CartResponse
+
+loop For each cart item
+  O -> PR: GET /products/{id}\nAuthorization: Bearer <token>
+  PR --> O: ProductResponse
+end
+
+O -> P: POST /payments\nAuthorization: Bearer <token>\n{orderId, amount, currency, idempotencyKey}
+P --> O: PaymentResponse
+
+alt Payment success
+  O -> C: POST /cart/deactivate\nAuthorization: Bearer <token>
+  C --> O: 200 OK
+  O --> U: 200 OK\nOrder(status=PAID)
+else Payment failure
+  O --> U: 200 OK\nOrder(status=PAYMENT_FAILED)
+end
+
+@enduml

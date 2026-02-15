@@ -1,0 +1,75 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Customer" as Customer
+actor "Admin" as Admin
+actor "Payment Gateway\n(Stripe)" as Stripe
+
+rectangle "E-commerce Microservices System" {
+  usecase "Register User\n(POST /auth/users)" as UC_Register
+  usecase "Login\n(POST /auth/login)" as UC_Login
+  usecase "View Profile\n(GET /auth/me)" as UC_Me
+  usecase "Reset Password\n(POST /auth/reset-password)" as UC_Reset
+
+  usecase "View Cart\n(GET /cart)" as UC_ViewCart
+  usecase "Add Item to Cart\n(POST /cart/items)" as UC_AddItem
+  usecase "Update Cart Item\n(PUT /cart/items/{productId})" as UC_UpdateItem
+  usecase "Remove Cart Item\n(DELETE /cart/items/{productId})" as UC_RemoveItem
+  usecase "Clear Cart\n(DELETE /cart)" as UC_ClearCart
+
+  usecase "Place Order\n(POST /orders)" as UC_PlaceOrder
+  usecase "View Orders\n(GET /orders)" as UC_ViewOrders
+  usecase "View Order Details\n(GET /orders/{orderId})" as UC_ViewOrderDetails
+
+  usecase "Manage Products\n(POST /products)" as UC_ManageProducts
+  usecase "Manage Categories\n(POST/PUT/DELETE /categories)" as UC_ManageCategories
+  usecase "Manage Product Images\n(POST/DELETE /products/{id}/images)" as UC_ManageImages
+
+  usecase "Fetch Cart For Checkout" as UC_FetchCart
+  usecase "Validate Product + Stock" as UC_ValidateProduct
+  usecase "Process Payment\n(POST /payments)" as UC_ProcessPayment
+  usecase "Deactivate Cart\n(POST /cart/deactivate)" as UC_DeactivateCart
+}
+
+Customer --> UC_Register
+Customer --> UC_Login
+Customer --> UC_Me
+Customer --> UC_Reset
+Customer --> UC_ViewCart
+Customer --> UC_AddItem
+Customer --> UC_UpdateItem
+Customer --> UC_RemoveItem
+Customer --> UC_ClearCart
+Customer --> UC_PlaceOrder
+Customer --> UC_ViewOrders
+Customer --> UC_ViewOrderDetails
+
+Admin --> UC_Login
+Admin --> UC_Me
+Admin --> UC_ManageProducts
+Admin --> UC_ManageCategories
+Admin --> UC_ManageImages
+
+UC_PlaceOrder ..> UC_FetchCart : <<include>>
+UC_PlaceOrder ..> UC_ValidateProduct : <<include>>
+UC_PlaceOrder ..> UC_ProcessPayment : <<include>>
+UC_PlaceOrder ..> UC_DeactivateCart : <<extend>>
+
+Stripe --> UC_ProcessPayment
+
+note right of UC_ManageProducts
+  ProductController marks create product
+  as "ADMIN only" in API docs.
+end note
+
+note right of UC_ManageCategories
+  Category CRUD endpoints are modeled
+  as admin management operations.
+end note
+
+note right of UC_DeactivateCart
+  Executed when payment succeeds.
+end note
+
+@enduml
