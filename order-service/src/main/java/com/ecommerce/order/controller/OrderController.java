@@ -29,7 +29,7 @@ public class OrderController {
     @Operation(summary = "Create new order")
     @PostMapping
     public Order createOrder(Authentication authentication) {
-        return service.createOrder(authentication.getName());
+        return service.createOrder(parseUserId(authentication));
     }
 
     /**
@@ -38,7 +38,7 @@ public class OrderController {
     @Operation(summary = "Get all orders of user")
     @GetMapping
     public List<Order> getUserOrders(Authentication authentication) {
-        return service.getOrdersForUser(authentication.getName());
+        return service.getOrdersForUser(parseUserId(authentication));
     }
 
     /**
@@ -50,8 +50,12 @@ public class OrderController {
             @PathVariable Long orderId,
             Authentication authentication) {
 
-        return service.getOrderDetails(orderId, authentication.getName());
+        return service.getOrderDetails(orderId, parseUserId(authentication));
     }
+    private Long parseUserId(Authentication authentication) {
+        return Long.parseLong(authentication.getName());
+    }
+
 }
 
 

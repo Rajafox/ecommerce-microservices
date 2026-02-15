@@ -17,6 +17,8 @@ import java.util.Optional;
 @Service
 public class PaymentService {
 
+    private final String DEFAULT_PAYMENT_METHOD = "pm_card_visa";
+    private final String[] DEFAULT_PAYMENT_METHOD_TYPES = new String[] {"card"};
     private final PaymentRepository repository;
 
     public PaymentService(PaymentRepository repository) {
@@ -49,6 +51,13 @@ public class PaymentService {
                                             .longValue() // paise
                             )
                             .setCurrency(request.currency().toLowerCase())
+                            .setPaymentMethod(DEFAULT_PAYMENT_METHOD)
+                            .setAutomaticPaymentMethods(
+                                    PaymentIntentCreateParams.AutomaticPaymentMethods
+                                            .builder()
+                                            .setEnabled(true)
+                                            .build()
+                            )
                             .putMetadata("orderId", request.orderId().toString())
                             .build();
 
@@ -63,7 +72,7 @@ public class PaymentService {
             Payment payment = new Payment();
             payment.setOrderId(request.orderId());
             payment.setAmount(request.amount());
-            payment.setCurrency(request.currency());
+            payment.setCurrency(request.currency().toLowerCase());
             payment.setIdempotencyKey(request.idempotencyKey());
             payment.setStripePaymentIntentId(intent.getId());
             payment.setStatus(PaymentStatus.SUCCESS);
@@ -81,7 +90,7 @@ public class PaymentService {
             Payment payment = new Payment();
             payment.setOrderId(request.orderId());
             payment.setAmount(request.amount());
-            payment.setCurrency(request.currency());
+            payment.setCurrency(request.currency().toLowerCase());
             payment.setIdempotencyKey(request.idempotencyKey());
             payment.setStatus(PaymentStatus.FAILED);
 

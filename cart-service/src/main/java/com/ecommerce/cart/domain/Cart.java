@@ -14,7 +14,14 @@ import java.util.List;
 public class Cart {
 
     @Id
-    private String userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 
     @OneToMany(
             mappedBy = "cart",
@@ -22,8 +29,6 @@ public class Cart {
             orphanRemoval = true
     )
     private List<CartItem> items = new ArrayList<>();
-
-    // getters & setters
 }
 
 

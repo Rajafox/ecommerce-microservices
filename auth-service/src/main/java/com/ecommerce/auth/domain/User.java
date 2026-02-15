@@ -1,9 +1,16 @@
 package com.ecommerce.auth.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
 
@@ -17,25 +24,33 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private List<String> roles;
+    @Column(nullable = false)
+    private String firstName;
 
-    public Long getId() { return id; }
-    public String getUsername() { return username; }
-    public String getPassword() { return password; }
-    public List<String> getRoles() { return roles; }
+    @Column(nullable = false)
+    private String lastName;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
+
+    @Column(nullable = false)
+    private Instant createdAt = Instant.now();
+
+    @Column(nullable = false)
+    private Instant updatedAt = Instant.now();
 }

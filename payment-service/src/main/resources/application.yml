@@ -2,6 +2,17 @@ spring:
   application:
     name: payment-service
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce
+    username: <username>
+    password: <password>
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -15,14 +26,12 @@ stripe:
   secret:
     key: <secret>
 
+jwt:
+  secret: a-string-secret-at-least-256-bits-long
+  expiration: 1800000   # 30 minutes
+
 management:
   endpoints:
     web:
       exposure:
         include: health,info
-
-datasource:
-  url: jdbc:mysql://localhost:3306/ecommerce
-  username: root
-  password: Tushar@061289
-  driver-class-name: com.mysql.cj.jdbc.Driver

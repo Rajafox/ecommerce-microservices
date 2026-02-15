@@ -38,4 +38,27 @@ public class AuthService {
         String token = tokenProvider.generateToken(user);
         return new AuthResponse(token);
     }
+
+    /**
+     * Reset user password
+     */
+    public void resetPassword(ResetPasswordRequest request) {
+        // Find user
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Verify old password
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid old password");
+        }
+
+        // Check new password is different
+        if (request.getOldPassword().equals(request.getNewPassword())) {
+            throw new RuntimeException("New password must be different from old password");
+        }
+
+        // Update password
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
 }

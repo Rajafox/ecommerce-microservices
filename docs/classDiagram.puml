@@ -1,0 +1,127 @@
+@startuml
+hide methods
+skinparam classAttributeIconSize 0
+
+package "auth-service domain" {
+  class User {
+    id: Long
+    username: String
+    password: String
+    firstName: String
+    lastName: String
+    email: String
+    phoneNumber: String
+    createdAt: Instant
+    updatedAt: Instant
+  }
+
+  class Role {
+    id: Integer
+    name: String
+    description: String
+  }
+
+  class Address {
+    id: Long
+    streetAddress: String
+    city: String
+    state: String
+    postalCode: String
+    country: String
+    phoneNumber: String
+    isDefault: Boolean
+    addressType: String
+    createdAt: Instant
+    updatedAt: Instant
+  }
+}
+
+package "cart-service domain" {
+  class Cart {
+    id: Long
+    userId: Long
+    isActive: Boolean
+  }
+
+  class CartItem {
+    id: Long
+    productId: Long
+    quantity: Integer
+  }
+}
+
+package "product-service domain" {
+  class Product {
+    id: Long
+    name: String
+    description: String
+    price: BigDecimal
+    stock: Integer
+    brand: String
+  }
+
+  class Category {
+    id: Long
+    name: String
+  }
+
+  class ProductImage {
+    id: Long
+    imageUrl: String
+  }
+}
+
+package "order-service domain" {
+  enum OrderStatus {
+    CREATED
+    PENDING_PAYMENT
+    PAID
+    PAYMENT_FAILED
+  }
+
+  class Order {
+    id: Long
+    userId: Long
+    totalAmount: BigDecimal
+    status: OrderStatus
+    createdAt: Instant
+  }
+}
+
+package "payment-service domain" {
+  enum PaymentStatus {
+    SUCCESS
+    FAILED
+    PROCESSING
+    PENDING
+  }
+
+  class Payment {
+    id: Long
+    orderId: Long
+    amount: BigDecimal
+    currency: String
+    idempotencyKey: String
+    stripePaymentIntentId: String
+    status: PaymentStatus
+    createdAt: Instant
+  }
+}
+
+User "1" -- "0..*" Address : addresses
+User "0..*" -- "0..*" Role : roles
+Cart "1" -- "0..*" CartItem : items
+Category "1" -- "0..*" Product : category
+Product "1" -- "0..*" ProductImage : images
+Order --> OrderStatus
+Payment --> PaymentStatus
+
+' Cross-service references represented by foreign-key ids (no JPA relation)
+Cart ..> User : userId
+Order ..> User : userId
+CartItem ..> Product : productId
+Payment ..> Order : orderId
+
+
+
+@enduml

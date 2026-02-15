@@ -1,8 +1,13 @@
 package com.ecommerce.product.controller;
 
+import com.ecommerce.product.api.ApiMessages;
+import com.ecommerce.product.api.ApiResponse;
 import com.ecommerce.product.domain.ProductImage;
 import com.ecommerce.product.dto.AddImageRequest;
 import com.ecommerce.product.service.ProductImageService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,22 +24,24 @@ public class ProductImageController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ProductImage addImage(
-            @PathVariable Long productId,
+            @Parameter(name = "productId", in = ParameterIn.PATH, description = "Product ID", required = true)
+            @PathVariable("productId")  Long productId,
             @RequestBody AddImageRequest request) {
 
         return service.addImage(productId, request.getImageUrl());
     }
 
     @GetMapping
-    public List<ProductImage> getImages(@PathVariable Long productId) {
+    public List<ProductImage> getImages(@Parameter(name = "productId", in = ParameterIn.PATH, description = "Product ID", required = true)
+                                            @PathVariable("productId")  Long productId) {
         return service.getImages(productId);
     }
 
     @DeleteMapping("/{imageId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteImage(@PathVariable Long imageId) {
+    public ResponseEntity<ApiResponse<Void>> deleteImage( @Parameter(name = "imageId", in = ParameterIn.PATH, description = "Image ID", required = true)
+                                 @PathVariable("imageId")  Long imageId ) {
         service.deleteImage(imageId);
+        return ResponseEntity.ok(ApiResponse.success(ApiMessages.IMAGE_DELETED, null));
     }
 }

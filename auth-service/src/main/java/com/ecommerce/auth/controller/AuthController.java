@@ -67,6 +67,19 @@ public class AuthController {
 
         return ResponseEntity.ok(userManagementService.createUser(request));
     }
+
+    @Operation(
+            summary = "Reset password",
+            description = "Reset user password by providing old password"
+    )
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(
+            @RequestBody ResetPasswordRequest request) {
+
+        authService.resetPassword(request);
+        return ResponseEntity.ok("Password reset successfully");
+    }
+
     /**
      * Simple response DTO for /me endpoint
      */

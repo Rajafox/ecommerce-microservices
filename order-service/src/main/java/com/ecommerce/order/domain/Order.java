@@ -17,11 +17,14 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
+    @Column(nullable = false)
     private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderStatus status;
 
     private Instant createdAt = Instant.now();
